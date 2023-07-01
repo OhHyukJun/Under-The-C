@@ -1,0 +1,56 @@
+version: "3"
+
+services:
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "${MARIADB_PORT}:${MARIADB_PORT}"
+    volumes:
+      - ./data:/var/lib/mysql
+    networks:
+      - deepsea
+    tty: true
+
+  spring:
+    image: spring
+    build: ./backend-spring
+    container_name: spring
+    depends_on:
+      - mariadb
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "${SPRING_PORT}:${SPRING_PORT}"
+    volumes:
+      - ./backend-spring:/backend-spring
+    networks:
+      - deepsea
+    tty: true
+    command: java -jar build/libs/DeepSea-0.0.1-SNAPSHOT.jar
+
+  #react:
+  #  image: react
+  #  build: ./frontend
+  #  container_name: react
+  #  depends_on:
+  #    - spring
+  #  restart: always
+  #  env_file:
+  #    - .env
+  #  ports:
+  #    - "${REACT_APP_PORT}:${REACT_APP_PORT}"
+  #  volumes:
+  #    - ./frontend:/frontend
+  #  networks:
+  #    - deepsea
+  #  tty: true
+  #  command: bash -c "npm i && npm run start:dev"
+
+networks:
+  deepsea:
+    driver: bridge

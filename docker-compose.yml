@@ -2,13 +2,13 @@ version: "3"
 
 services:
   mariadb:
-    image: mariadb:latest
+    build: ./db-mariadb
     container_name: mariadb
     restart: always
     env_file:
       - .env
-    ports:
-      - "${MARIADB_PORT}:${MARIADB_PORT}"
+    expose:
+      - "3306"
     volumes:
       - ./db-mariadb/data:/var/lib/mysql
     networks:
@@ -16,7 +16,6 @@ services:
     tty: true
 
   spring:
-    image: spring
     build: ./backend-spring
     container_name: spring
     depends_on:

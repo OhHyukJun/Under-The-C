@@ -1,17 +1,37 @@
-FROM mariadb:latest
+# alpine 3.16 Version을 기반으로 한다.
+FROM alpine:latest
 
-RUN mkdir mariadb
-WORKDIR /mariadb
+# no-cache 옵션은 /var/cache/apk/* 에 garbage가 남지 않음.
+# alpine3.16 기준 mariadb-10.6.8-r0 LTS
+# SQL문을 직접 넣기위해 client 필요
+RUN apk update && apk upgrade && apk add --no-cache mariadb mariadb-client dumb-init
 
-# 초기 세팅 SQL 파일 Docker로 Copy
-COPY ./conf/setDB.sh /setDB.sh
+# mysql_secure_installation 설정이 담긴 sql쿼리문
+#COPY conf/mysql_secure_installation.sql /home/
 
-# MariaDB Config Setting (table 소문자, 한국 시간, 한글 깨짐 수정 등)
-RUN echo lower_case_table_names=1 >> /etc/mysql/conf.d/docker.cnf
-RUN echo default-time-zone='+9:00' >> /etc/mysql/conf.d/docker.cnf
-RUN echo collation-server = utf8mb4_unicode_ci >> /etc/mysql/conf.d/docker.cnf
-RUN echo collation-server = utf8mb4_0900_ai_ci >> /etc/mysql/conf.d/docker.cnf
-RUN echo character-set-server = utf8mb4 >> /etc/mysql/conf.d/docker.cnf
-RUN echo skip-character-set-client-handshake >> /etc/mysql/conf.d/docker.cnf
+# sql server 설정 since alpine 3.9 First Global config file, main directives
+COPY conf/mariadb-server.cnf /etc/my.cnf.d/
+RUN chmod 755 /etc/my.cnf.d/mariadb-server.cnf
 
-ENTRYPOINT ["sh", "/setDB.sh"]
+# wordpress database 설정
+#COPY conf/create_wordpressdb_user.sql /home/
+
+# sql 시작 스크립트
+COPY conf/start_mariadb.sh /home
+
+
+RUN chmod 777 /home/start_mariadb.sh
+
+
+#chmod 777 /usr/bin/mysqld_safe && \
+#RUN chmod 777 /var/lib/mysql
+#chmod +x /run/mysqld && \Q
+
+#USER maria
+#WORKDIR /home/maria
+
+#VOLUME ["/var/lib/mysql"]
+
+# DBMS포트는 3306을 사용한다.
+#EXPOSE 3306
+ENTRYPOINT ["/usr/bin/dumb-init", "--", "/home/start_mariadb.sh"]

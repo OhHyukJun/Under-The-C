@@ -12,6 +12,6 @@ fclean : clean
 	docker network prune --force
 	docker volume prune --force
 	docker system prune --all --force --volumes
-	rm -rf db-mariadb/data
+	sudo rm -rf db-mariadb/data
 
 re : fclean all

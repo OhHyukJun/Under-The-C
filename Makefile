@@ -13,5 +13,6 @@ fclean : clean
 	docker volume prune --force
 	docker system prune --all --force --volumes
 	rm -rf db-mariadb/data
+	cd backend-spring && ./gradlew clean
 
 re : fclean all

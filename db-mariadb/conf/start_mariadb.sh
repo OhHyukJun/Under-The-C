@@ -13,7 +13,7 @@ if [ ! -d /var/lib/mysql/$MARIADB_DATABASE ]; then
 	# BackGround로 실행한다.
 	/usr/bin/mysqld_safe --user=mysql --datadir=/var/lib/mysql/ &
 
-	sleep 1
+	sleep 3
 
 
 	# ===================================================
@@ -57,6 +57,7 @@ if [ ! -d /var/lib/mysql/$MARIADB_DATABASE ]; then
 
 	# mysqld_safe BackGround 종료
 	mysqladmin -u root --password=$MARIADB_ROOT_PASSWORD shutdown
+	sleep 1
 
 fi
 # ForeGround로 실행한다.

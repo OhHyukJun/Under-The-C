@@ -4,7 +4,7 @@ FROM alpine:latest
 # no-cache 옵션은 /var/cache/apk/* 에 garbage가 남지 않음.
 # alpine3.16 기준 mariadb-10.6.8-r0 LTS
 # SQL문을 직접 넣기위해 client 필요
-RUN apk update && apk upgrade && apk add --no-cache mariadb mariadb-client dumb-init
+RUN apk update && apk upgrade && apk add mariadb mariadb-client dumb-init
 
 # mysql_secure_installation 설정이 담긴 sql쿼리문
 #COPY conf/mysql_secure_installation.sql /home/

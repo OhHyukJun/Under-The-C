@@ -9,6 +9,6 @@ public class homeController {
     @RequestMapping("/")
     public String home(Model model) {
         return "Hello guys!\n" +
-                "Welcome to the deep C!";
+                "Welcome to the Deep C!";
     }
 }

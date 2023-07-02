@@ -1,4 +1,4 @@
 #!/bin/sh
 
 ./gradlew build
-nohup java -jar build/libs/DeepSea-0.0.1-SNAPSHOT.jar &
+java -jar build/libs/DeepSea-0.0.1-SNAPSHOT.jar

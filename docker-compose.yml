@@ -28,7 +28,7 @@ services:
     ports:
       - "${SPRING_PORT}:${SPRING_PORT}"
     volumes:
-      - ./backend-spring:/root/backend-spring
+      - ./backend-spring:/backend-spring
     networks:
       - deep-sea
     tty: true

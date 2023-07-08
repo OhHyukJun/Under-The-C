@@ -5,6 +5,16 @@ all : $(NAME)
 $(NAME) :
 	docker compose up -d
 
+start :
+	docker start mariadb
+	docker start spring
+
+stop :
+	docker stop spring
+	docker stop mariadb
+
+restart: stop start
+
 clean :
 	docker compose down --remove-orphans --rmi all --volumes
 	cd backend-spring && ./gradlew clean

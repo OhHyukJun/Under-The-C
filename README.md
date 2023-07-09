@@ -1,3 +1,3 @@
 # Evaluation-Lecture-team06
-여기는 jenkins가 자동으로 배포하는 branch입니다.
-git push 이벤트를 감지하고 빌드하여 서버에 배포합니다!
+여기는 jenkins가 PR을 자동으로 테스트하는 branch입니다.
+PR 요청시 테스트에 성공했을 경우에 merge가 가능합니다!

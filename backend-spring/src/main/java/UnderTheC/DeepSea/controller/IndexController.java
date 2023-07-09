@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Tag(name = "index", description = "테스트용 API")
 @RequestMapping("/")
-public class indexController {
+public class IndexController {
     @GetMapping("")
     @Operation(summary = "Hello!", description = "처음으로 만든 API", responses = {
             @ApiResponse(responseCode = "200", description = "야호! 성공!!!")

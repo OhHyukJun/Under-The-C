@@ -15,7 +15,7 @@ public class ApiDocumentationConfig {
         return new OpenAPI()
                 .info(new Info()
                         .title("Under The C API")
-                        .description("방학과제 API 입니다. 문의는 카톡이나 슬랙DM으로 연락주세요.")
+                        .description("방학과제 API 입니다. 문의는 카톡이나 슬랙으로 연락주세요.")
                         .version("0.0.1")
                         .contact(new Contact()
                                 .name("김민석")

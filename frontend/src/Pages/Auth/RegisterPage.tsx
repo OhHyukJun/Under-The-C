@@ -22,7 +22,7 @@ const RegisterPage: React.FC = () => {
       <h2>회원가입</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <label>
-          Name:
+          아이디:
           <input
             type="text"
             {...register('name', { required: '이름을 입력하세요' })}
@@ -38,7 +38,7 @@ const RegisterPage: React.FC = () => {
         </label>
         <br />
         <label>
-          Password:
+          비밀번호:
           <input
             type="password"
             {...register('password', { 

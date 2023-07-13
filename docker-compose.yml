@@ -34,23 +34,23 @@ services:
     tty: true
     #command: java -jar build/libs/DeepSea-0.0.1-SNAPSHOT.jar
 
-  #react:
-  #  image: react
-  #  build: ./frontend
-  #  container_name: react
-  #  depends_on:
-  #    - spring
-  #  restart: always
-  #  env_file:
-  #    - .env
-  #  ports:
-  #    - "${REACT_APP_PORT}:${REACT_APP_PORT}"
-  #  volumes:
-  #    - ./frontend:/frontend
-  #  networks:
-  #    - deep-sea
-  #  tty: true
-  #  command: bash -c "npm i && npm run start:dev"
+  react:
+    image: react
+    build: ./frontend-react
+    container_name: react
+    depends_on:
+      - spring
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "${REACT_PORT}:${REACT_PORT}"
+    volumes:
+      - ./frontend-react:/frontend-react
+    networks:
+      - deep-sea
+    tty: true
+    #command: bash -c "npm i && npm run start:dev"
 
 networks:
   deep-sea:

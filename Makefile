@@ -11,10 +11,12 @@ test :
 start :
 	docker start mariadb
 	docker start spring
+	docker start react
 
 stop :
 	docker stop spring
 	docker stop mariadb
+	docker stop react
 
 restart: stop start
 

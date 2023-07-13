@@ -4,9 +4,8 @@ WORKDIR /frontend
 
 COPY . .
 
-RUN apk update && apk add bash
-RUN npm install && npm audit fix --force
-
+RUN apk update
+RUN npm install
 
 EXPOSE 3000
 

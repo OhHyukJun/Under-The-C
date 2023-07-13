@@ -36,7 +36,7 @@ services:
 
   react:
     image: react
-    build: ./frontend
+    build: ./frontend-react
     container_name: react
     depends_on:
       - spring
@@ -46,11 +46,11 @@ services:
     ports:
       - "${REACT_PORT}:${REACT_PORT}"
     volumes:
-      - ./frontend:/frontend
+      - ./frontend-react:/frontend-react
     networks:
       - deep-sea
     tty: true
-    command: bash -c "npm i && npm run start:dev"
+    #command: bash -c "npm i && npm run start:dev"
 
 networks:
   deep-sea:

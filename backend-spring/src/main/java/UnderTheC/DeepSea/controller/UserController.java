@@ -22,11 +22,20 @@ public class UserController {
 
     @GetMapping("")
     @Operation(summary = "유저 모두 찾기", description = "user 테이블에 저장된 모든 유저 정보를 반환", responses = {
-            @ApiResponse(responseCode = "200", description = "성공")
+            @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "400", description = "실패")
     })
     public List<User> findAll() {
         List<User> user = null;
         user = userRepository.findAll();
+        return user;
+    }
+
+    @GetMapping("/email")
+    @Operation(summary = "유저를 email 기준으로 찾기")
+    public User findByEmail(@RequestParam("email") String email) {
+        User user = null;
+        user = userRepository.findByEmail(email);
         return user;
     }
 

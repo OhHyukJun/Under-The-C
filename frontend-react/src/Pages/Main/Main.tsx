@@ -11,7 +11,6 @@ const Main = () => {
 		onSuccess: (data) => setLectureList(data)
 		//기본 캐시 타임 == 5min
 	});
-
   if (isLoading)
     return <h2>Loading...</h2>
 	

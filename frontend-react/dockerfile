@@ -1,12 +1,12 @@
 FROM node:18-alpine
 
-WORKDIR /frontend
+
+WORKDIR /frontend-react
 
 COPY . .
 
 RUN apk update
-RUN npm install
 
 EXPOSE 3000
 
-CMD ["npm", "start"]
+CMD ["sh", "fastbuild.sh"]

@@ -2,12 +2,12 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 
 interface Member {
-  name: string;
-  id: string;
+  email: string;
+  authNumber: number;
   password: string;
 }
 
-const RegisterPage: React.FC = () => {
+const RegisterPage = () => {
   const { register, handleSubmit, formState: { errors } , reset} = useForm<Member>();
 
 
@@ -19,30 +19,33 @@ const RegisterPage: React.FC = () => {
 
   return (
     <>
-      <h2>회원가입</h2>
+      <h1>회원가입</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <label>
-          아이디:
+          <p>학교 이메일 입력하기</p>
           <input
+            className=" absolute bg-gray-300"
+            type="email"
+            {...register('email', { required: '이메일을 입력하세요' })}
+          />
+        </label>
+        <br />
+        <label>
+          <p>인증번호 입력하기</p>
+          <input 
+            className="absolute bg-gray-300"
             type="text"
-            {...register('name', { required: '이름을 입력하세요' })}
+            {...register('authNumber', { required: '인증번호를 입력해주세요'})}
           />
         </label>
         <br />
         <label>
-          ID:
+          <p>비밀번호 입력하기</p>
           <input
-            type="id"
-            {...register('id', { required: '아이디를 입력해주세요'})}
-          />
-        </label>
-        <br />
-        <label>
-          비밀번호:
-          <input
+            className=" absolute bg-gray-300"
             type="password"
             {...register('password', { 
-                required: '비밀번호를 입력해주세요', 
+                required: '비밀번호를 입력', 
                     minLength:{
                         value: 6,
                         message: '비밀번호는 최소 6자리입니다.',
@@ -51,8 +54,9 @@ const RegisterPage: React.FC = () => {
           />
         </label>
         <br />
-        <p>{errors?.name?.message || errors?.id?.message ||errors?.password?.message}</p>
-        <button type="submit">Register</button>
+        <p>{errors?.email?.message || errors?.authNumber?.message ||errors?.password?.message}</p>
+        <button type="submit">회원가입</button>
+        <button type="reset">취소</button>
       </form>
     </>
   );

@@ -1,7 +1,10 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Board from './Pages/Board/Board';
+import LoginPage from './Pages/Auth/LoginPage';
 import RegisterPage from './Pages/Auth/RegisterPage';
+import Header from './Layout/Header';
+import Footer from './Layout/Footer';
 import Main from './Pages/Main/Main';
 import UserPage from './Pages/User/UserPage';
 
@@ -9,16 +12,19 @@ import UserPage from './Pages/User/UserPage';
 const App = () => {
   return (
     <>
+    <Header/>
       {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Main/>}/>
-            <Route path="/board" element={<Board/>}/>
+            <Route path="/Board" element={<Board/>}/>
             <Route path="/UserPage" element={<UserPage/>}/>
+            <Route path='/LoginPage' element={<LoginPage/>}/>
             <Route path="/RegisterPage" element={<RegisterPage/>}/>
           </Routes>
         </BrowserRouter>
       }
+      <Footer/>
     </>
   )
 }

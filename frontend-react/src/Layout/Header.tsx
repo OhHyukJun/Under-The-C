@@ -1,4 +1,3 @@
-
 const Header = () => {
     return (
         <div className="max-w-2xl mx-auto">
@@ -42,9 +41,8 @@ const Header = () => {
             <ul className="flex-col md:flex-row flex md:space-x-8 mt-4 md:mt-0 md:text-sm md:font-medium">
               <li>
                 <a
-                  href="/"
-                  className="bg-blue-700 md:bg-transparent text-white block pl-3 pr-4 py-2 md:text-blue-700 md:p-0 rounded"
-                  aria-current="page"
+                  href="/Board"
+                  className="text-gray-700 hover:bg-gray-50 border-b border-gray-100 md:hover:bg-transparent md:border-0 block pl-3 pr-4 py-2 md:hover:text-blue-700 md:p-0"
                 >
                   Main
                 </a>
@@ -55,6 +53,22 @@ const Header = () => {
                   className="text-gray-700 hover:bg-gray-50 border-b border-gray-100 md:hover:bg-transparent md:border-0 block pl-3 pr-4 py-2 md:hover:text-blue-700 md:p-0"
                 >
                   강의 평가
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/Board"
+                  className="text-gray-700 hover:bg-gray-50 border-b border-gray-100 md:hover:bg-transparent md:border-0 block pl-3 pr-4 py-2 md:hover:text-blue-700 md:p-0"
+                >
+                  회원 가입
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/Board"
+                  className="text-gray-700 hover:bg-gray-50 border-b border-gray-100 md:hover:bg-transparent md:border-0 block pl-3 pr-4 py-2 md:hover:text-blue-700 md:p-0"
+                >
+                  로그인
                 </a>
               </li>
             </ul>

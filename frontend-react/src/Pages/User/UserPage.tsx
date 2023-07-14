@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-const UserPage: React.FC = () => {
+const UserPage = () => {
     return (
         <>
             <h1>마이 페이지</h1>

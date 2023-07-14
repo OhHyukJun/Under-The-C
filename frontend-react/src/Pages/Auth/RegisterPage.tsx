@@ -7,7 +7,7 @@ interface Member {
   password: string;
 }
 
-const RegisterPage: React.FC = () => {
+const RegisterPage = () => {
   const { register, handleSubmit, formState: { errors } , reset} = useForm<Member>();
 
 

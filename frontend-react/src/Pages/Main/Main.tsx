@@ -1,4 +1,3 @@
-
 import Header from '../../Layout/Header';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRecoilState } from "recoil";
@@ -24,9 +23,9 @@ const Main = () => {
       <Header />
       <h1>Main page</h1>
       {
-				lectureList?.map((item: ILecture) => {
-					return <Lecture key={item.id} {...item} /> })
-	 		}
+		lectureList?.map((item: ILecture) => {
+			return <Lecture key={item.id} {...item} /> })
+	  }
     </>
   );
 };

@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.apache.catalina.connector.Request;
 import org.springframework.web.bind.annotation.*;
@@ -49,19 +50,20 @@ public class IndexController {
         String password = (String) json.get("password");
 
         Optional<User> result = this.userRepository.findById(id);
-        User loginMember = result.orElse(null);
+        User loginUser = result.orElse(null);
 
         /* 아이디와 패스워드 확인 */
-        if (loginMember == null || !loginMember.getPasswd().equals(password)) {
+        if (loginUser == null || !loginUser.getPasswd().equals(password)) {
             return new JsonDto("fail", "아이디 또는 패스워드가 틀렸습니다.");
         }
 
         /* 로그인 성공 처리 신규 세션을 생성 */
         HttpSession session = request.getSession();
-        //세션에 로그인 회원 정보 보관
-        session.setAttribute("login", loginMember);
+        /* 세션에 로그인 회원 정보 보관 */
+        session.setAttribute("loginUser", loginUser);
+        /* 세션 id는 쿠키에 JSESSIONID 값으로 저장됨 */
 
-        return new LoginDto("success", "로그인 성공", session.getId(), loginMember);
+        return new LoginDto("success", "로그인 성공", loginUser);
     }
 
     @GetMapping("logout")

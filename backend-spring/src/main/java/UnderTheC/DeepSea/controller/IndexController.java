@@ -41,7 +41,7 @@ public class IndexController {
     public JsonDto login(HttpServletRequest request, @RequestBody HashMap<String, Object> json) {
         /* 로그인 상태 확인 */
         if (request.getSession(false) != null) {
-            return new JsonDto("Fail", "이미 로그인 되어 있습니다.");
+            return new JsonDto("fail", "이미 로그인 되어 있습니다.");
         }
 
         /* json 데이터로 유저 정보 확인 */
@@ -53,7 +53,7 @@ public class IndexController {
 
         /* 아이디와 패스워드 확인 */
         if (loginMember == null || !loginMember.getPasswd().equals(password)) {
-            return new JsonDto("Fail", "아이디 또는 패스워드가 틀렸습니다.");
+            return new JsonDto("fail", "아이디 또는 패스워드가 틀렸습니다.");
         }
 
         /* 로그인 성공 처리 신규 세션을 생성 */
@@ -61,7 +61,7 @@ public class IndexController {
         //세션에 로그인 회원 정보 보관
         session.setAttribute("login", loginMember);
 
-        return new LoginDto("Success", "로그인 성공", session.getId(), loginMember);
+        return new LoginDto("success", "로그인 성공", session.getId(), loginMember);
     }
 
     @GetMapping("logout")
@@ -71,9 +71,9 @@ public class IndexController {
     public JsonDto logout(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session == null) {
-            return new JsonDto("Fail", "로그인 되어 있지 않습니다.");
+            return new JsonDto("fail", "로그인 되어 있지 않습니다.");
         }
         session.invalidate();
-        return new JsonDto("Success", "로그아웃 성공");
+        return new JsonDto("success", "로그아웃 성공");
     }
 }

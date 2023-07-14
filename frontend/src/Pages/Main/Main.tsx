@@ -1,4 +1,4 @@
-import { Header } from '../../Layout/Header';
+import Header from '../../Layout/Header';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRecoilState } from "recoil";
 import { Lecture } from './Lecture';

@@ -35,7 +35,7 @@ services:
     #command: java -jar build/libs/DeepSea-0.0.1-SNAPSHOT.jar
 
   react:
-    image: react
+    image: my_react
     build: ./frontend-react
     container_name: react
     depends_on:

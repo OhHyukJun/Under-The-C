@@ -1,6 +1,6 @@
-import { LectureI } from './Main'
+import { ILecture } from '../../Atoms/Lecture';
 
-export const Lecture = (props: LectureI) => {
+export const Lecture = (props: ILecture) => {
   return (
 	<>
 	<div >

@@ -1,25 +1,16 @@
 import { Header } from '../../Layout/Header';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useRecoilState } from "recoil";
 import { Lecture } from './Lecture';
-import axios from "axios";
-
-const URI = "http://localhost:4000/posts";
-
-export interface LectureI {
-  id: number;
-  title: string;
-  professor: string;
-  lecture: string;
-  rating: number;
-}
-
-const fetchData = async () => {
-  const res = await axios.get(URI);
-  return res.data;
-}
+import { lectureListState, ILecture } from '../../Atoms/Lecture';
+import { fetchPost } from '../../Api/api';
 
 const Main = () => {
-  const { isLoading, isError, data } = useQuery(['lecture'], fetchData);
+	const [ lectureList, setLectureList ] = useRecoilState(lectureListState);
+  const { isLoading, isError, data } = useQuery(['lecture'], fetchPost, {
+		onSuccess: (data) => setLectureList(data)
+		//기본 캐시 타임 == 5min
+	});
 
   if (isLoading)
     return <h2>Loading...</h2>
@@ -32,7 +23,7 @@ const Main = () => {
       <Header />
       <h1>Main page</h1>
       {
-				data?.map((item: LectureI) => {
+				lectureList?.map((item: ILecture) => {
 					return <Lecture key={item.id} {...item} /> })
 	 		}
     </>

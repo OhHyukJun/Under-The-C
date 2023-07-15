@@ -64,10 +64,11 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "회원가입 완료"),
             @ApiResponse(responseCode = "400", description = "회원가입 실패")
     })
+
     public User addById(@RequestBody HashMap<String, Object> json) {
         /* json 데이터로 유저 정보 확인 */
         String id = (String) json.get("id");
-        String passwd = (String) json.get("passwd");
+        String password = (String) json.get("password");
         String email = (String) json.get("email");
 
         /* 아이디 중복 검사 */
@@ -77,8 +78,8 @@ public class UserController {
 
         /* 아이디가 중복되지 않고 이메일이 유효할 경우, 회원가입 진행 */
         User user = new User();
-        user.setID(id);
-        user.setPasswd(passwd);
+        user.setId(id);
+        user.setPassword(password);
         user.setEmail(email);
         userRepository.save(user);
         return user;
@@ -101,7 +102,7 @@ public class UserController {
     public User updateById(@RequestBody HashMap<String, Object> json) {
         /* json 데이터로 유저 정보 확인 */
         String id = (String) json.get("id");
-        String passwd = (String) json.get("passwd");
+        String password = (String) json.get("password");
         String email = (String) json.get("email");
 
         /* 유저 테이블 내 아이디의 존재 유무 검사 */
@@ -111,7 +112,7 @@ public class UserController {
 
         /* 유저 테이블 내에 아이디가 존재하고 이메일이 유효할 경우, 회원 정보 수정 진행 */
         User afterUser = beforeUser;
-        afterUser.setPasswd(passwd);
+        afterUser.setPassword(password);
         afterUser.setEmail(email);
         userRepository.save(afterUser);
         return afterUser;
@@ -125,12 +126,12 @@ public class UserController {
     public User deleteById(@RequestBody HashMap<String, Object> json) {
         /* json 데이터로 유저 정보 확인 */
         String id = (String) json.get("id");
-        String passwd = (String) json.get("passwd");
+        String password = (String) json.get("password");
 
         Optional<User> user = userRepository.findById(id);
 
         /* 유저 테이블 내에 아이디가 존재하고 비밀번호가 일치하면 회원탈퇴 진행, 아니면 400 오류 메시지 반환  */
-        if (user.isPresent() && user.get().getPasswd().equals(passwd)) {
+        if (user.isPresent() && user.get().getPassword().equals(password)) {
             userRepository.deleteById(id);
             return user.get();
         }

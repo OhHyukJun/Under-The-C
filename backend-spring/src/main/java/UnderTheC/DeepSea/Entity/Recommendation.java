@@ -3,7 +3,7 @@ package UnderTheC.DeepSea.Entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
+import java.util.Date;
 @Entity
 @Table(name = "recommendation")
 @Getter
@@ -15,7 +15,9 @@ public class Recommendation {
     @Column(length = 20)
     String userID ;
     @Column(length = 20)
-    String evaluationID;
-    String created_at;
-    String updated_at;
+    int evaluationID;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date created_at;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updated_at;
 }

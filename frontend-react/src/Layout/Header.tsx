@@ -1,6 +1,6 @@
 const Header = () => {
     return (
-        <div className="max-w-2xl mx-auto">
+        <div className="max-w-5xl mx-auto">
       <nav className="border-gray-200 px-2 mb-10">
         <div className="container mx-auto flex flex-wrap justify-between">
           <a href="/" className="flex">
@@ -13,13 +13,12 @@ const Header = () => {
               xmlns="http://www.w3.org/2000/svg"
             >
             </svg>
-            <span className="self-center text-lg font-semibold whitespace-nowrap">
+            <span className="self-center text-3xl font-semibold whitespace-nowrap">
                 Under-The-C
             </span>
           </a>
           <div className="flex md:order-2">
             <div className="relative mr-3 md:mr-0 hidden md:block">
-              {/* Search input */}
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <svg
                   className="w-5 h-5 text-gray-500"
@@ -41,8 +40,8 @@ const Header = () => {
             <ul className="flex-col md:flex-row flex md:space-x-8 mt-4 md:mt-0 md:text-sm md:font-medium">
               <li>
                 <a
-                  href="/Board"
-                  className="text-gray-700 hover:bg-gray-50 border-b border-gray-100 md:hover:bg-transparent md:border-0 block pl-3 pr-4 py-2 md:hover:text-blue-700 md:p-0"
+                  href="/"
+                  className="text-gray-700 hover:bg-gray-50 border-b border-gray-100 md:hover:bg-transparent md:border-0 block pl-3 pr-4 py-2 md:hover:text-gray-300 md:p-0"
                 >
                   Main
                 </a>
@@ -50,23 +49,23 @@ const Header = () => {
               <li>
                 <a
                   href="/Board"
-                  className="text-gray-700 hover:bg-gray-50 border-b border-gray-100 md:hover:bg-transparent md:border-0 block pl-3 pr-4 py-2 md:hover:text-blue-700 md:p-0"
+                  className="text-gray-700 hover:bg-gray-50 border-b border-gray-100 md:hover:bg-transparent md:border-0 block pl-3 pr-4 py-2 md:hover:text-gray-300 md:p-0"
                 >
                   강의 평가
                 </a>
               </li>
               <li>
-                <a
-                  href="/Board"
-                  className="text-gray-700 hover:bg-gray-50 border-b border-gray-100 md:hover:bg-transparent md:border-0 block pl-3 pr-4 py-2 md:hover:text-blue-700 md:p-0"
+              <a
+                  href="/RegisterPage"
+                  className="text-gray-700 hover:bg-gray-50 border-b border-gray-100 md:hover:bg-transparent md:border-0 block pl-3 pr-4 py-2 md:hover:text-gray-300 md:p-0"
                 >
                   회원 가입
                 </a>
               </li>
               <li>
-                <a
-                  href="/Board"
-                  className="text-gray-700 hover:bg-gray-50 border-b border-gray-100 md:hover:bg-transparent md:border-0 block pl-3 pr-4 py-2 md:hover:text-blue-700 md:p-0"
+              <a
+                  href="/LoginPage"
+                  className="text-gray-700 hover:bg-gray-50 border-b border-gray-100 md:hover:bg-transparent md:border-0 block pl-3 pr-4 py-2 md:hover:text-gray-300 md:p-0"
                 >
                   로그인
                 </a>

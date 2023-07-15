@@ -46,8 +46,8 @@ public class UserController {
     public User addById(@RequestParam("id") String id) {
         User user = null;
         user = new User();
-        user.setID(id);
-        user.setPasswd("1234");
+        user.setId(id);
+        user.setPassword("1234");
         user.setEmail("ACID@naver.com");
         userRepository.save(user);
         return user;

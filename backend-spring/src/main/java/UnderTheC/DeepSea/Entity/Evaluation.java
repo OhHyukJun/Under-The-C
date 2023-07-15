@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Entity
 @Table(name = "evaluation")
 @Getter
@@ -40,4 +42,9 @@ public class Evaluation {
     private String lectureScore;
     @Column(length = 20)
     private int likeCount;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date created_at;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updated_at;
+
 }

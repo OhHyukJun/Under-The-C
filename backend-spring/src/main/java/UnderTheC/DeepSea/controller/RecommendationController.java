@@ -24,6 +24,8 @@ import java.util.function.Function;
 @RequestMapping("/recommendation")
 public class RecommendationController {
     RecommendationRepository recommendationRepository;
+    EvaluationRepository evaluationRepository;
+    EvaluationController evaluationController;
 
     RecommendationController(RecommendationRepository recommendationRepository) {
         this.recommendationRepository = recommendationRepository;
@@ -33,11 +35,28 @@ public class RecommendationController {
     @Operation(summary = "강의 평가 추천", description = "user id, evaluationID 받아와서 recommendation테이블에 추가", responses = {
             @ApiResponse(responseCode = "200", description = "성공")
     })
-    public Recommendation recommendEvaluation(@RequestParam("ID") String ID,@RequestParam("evaluationID") String evalutionID,@RequestParam("recIndex") int recID) {
+    public Recommendation recommendEvaluation(
+            @RequestParam("userID") String userID,
+            @RequestParam("evaluationID") int evaluationID,
+            @RequestParam("recIndex") int recID
+    ) {
         Recommendation recommendation = null;
         recommendation = new Recommendation();
+        recommendation.setUserID(userID);
+        recommendation.setEvaluationID(userID);
 
 
+        Optional<Evaluation> evaluation = null;
+        evaluation = evaluationRepository.findById(String.valueOf(evaluationID));
+        int temp =evaluation.get().getLikeCount();
+        if(evaluation.get().getUserID()==userID && evaluation.get().getEvaluationID()==evaluationID){
+            temp--; //추천 삭제
+            evaluation.get().setLikeCount(temp);
+        }
+        else{
+            temp++;
+            evaluation.get().setLikeCount(temp);
+        }
         return recommendation;
     }
 

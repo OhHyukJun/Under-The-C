@@ -73,10 +73,10 @@ public class IndexController {
     })
     public LoginResponse logout(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
-        User loginUser = (User) session.getAttribute("loginUser");
         if (session == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "로그인 되어 있지 않습니다.");
         }
+        User loginUser = (User) session.getAttribute("loginUser");
         session.invalidate();
         return new LoginResponse("success", "로그아웃 성공", loginUser);
     }

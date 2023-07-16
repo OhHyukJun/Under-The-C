@@ -5,13 +5,11 @@ import UnderTheC.DeepSea.repository.UserRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.hibernate.Hibernate;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -29,10 +27,7 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "조회 성공"),
             @ApiResponse(responseCode = "400", description = "조회 실패")
     })
-    public User findById(@RequestBody HashMap<String, Object> json) {
-        /* json 데이터로 유저 정보 확인 */
-        String id = (String) json.get("id");
-
+    public User findById(@RequestParam("id") String id) {
         Optional<User> user = userRepository.findById(id);
 
         /* 유저 테이블에 유저의 정보가 존재하면 유저 정보 반환, 아니면 400 오류 메시지 반환 */

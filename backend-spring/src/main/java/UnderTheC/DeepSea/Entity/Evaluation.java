@@ -43,8 +43,8 @@ public class Evaluation {
     @Column(length = 20)
     private int likeCount;
     @Temporal(TemporalType.TIMESTAMP)
-    private Date created_at;
+    private Date created;
     @Temporal(TemporalType.TIMESTAMP)
-    private Date updated_at;
+    private Date updated;
 
 }

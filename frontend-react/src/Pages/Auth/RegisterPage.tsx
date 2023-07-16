@@ -1,10 +1,11 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 
+
 interface Member {
-  email: string;
-  authNumber: number;
-  password: string;
+	email: string;
+    authNumber: number;
+    password: string;
 }
 
 const RegisterPage = () => {

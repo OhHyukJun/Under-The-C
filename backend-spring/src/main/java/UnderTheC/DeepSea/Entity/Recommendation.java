@@ -17,7 +17,7 @@ public class Recommendation {
     @Column(length = 20)
     int evaluationID;
     @Temporal(TemporalType.TIMESTAMP)
-    private Date created_at;
+    private Date created;
     @Temporal(TemporalType.TIMESTAMP)
-    private Date updated_at;
+    private Date updated;
 }

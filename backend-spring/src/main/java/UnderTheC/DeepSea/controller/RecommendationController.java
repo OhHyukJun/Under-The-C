@@ -25,14 +25,14 @@ import java.util.function.Function;
 public class RecommendationController {
     RecommendationRepository recommendationRepository;
     EvaluationRepository evaluationRepository;
-    EvaluationController evaluationController;
 
-    RecommendationController(RecommendationRepository recommendationRepository) {
+    RecommendationController(RecommendationRepository recommendationRepository, EvaluationRepository evaluationRepository) {
         this.recommendationRepository = recommendationRepository;
+        this.evaluationRepository = evaluationRepository;
     }
 
     @PostMapping("/recommend")
-    @Operation(summary = "강의 평가 추천", description = "user id, evaluationID 받아와서 recommendation테이블에 추가", responses = {
+    @Operation(summary = "강의 평가 추천", description = "user id, evaluationID 받아와서 recommendation 테이블에 추가", responses = {
             @ApiResponse(responseCode = "200", description = "성공")
     })
     public Recommendation recommendEvaluation(
@@ -43,7 +43,7 @@ public class RecommendationController {
         Recommendation recommendation = null;
         recommendation = new Recommendation();
         recommendation.setUserID(userID);
-        recommendation.setEvaluationID(userID);
+        recommendation.setEvaluationID(evaluationID);
 
 
         Optional<Evaluation> evaluation = null;

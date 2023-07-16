@@ -1,21 +1,14 @@
 package UnderTheC.DeepSea.controller;
 
 import UnderTheC.DeepSea.Entity.Evaluation;
-import UnderTheC.DeepSea.Entity.User;
 import UnderTheC.DeepSea.repository.EvaluationRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.repository.query.FluentQuery;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 
 @RestController
 @Tag(name = "Evaluation API", description = "강의 평가 API")
@@ -38,9 +31,9 @@ public class EvaluationController {
     ) {
         List<Evaluation> evaluation;
         if (sortBy.equals("좋아요수")) {
-            evaluation = evaluationRepository.findByLectureNameOrderByLikeCountAsc(lectureName);
+            evaluation = evaluationRepository.findAllByLectureNameOrderByLikeCountAsc(lectureName);
         } else if (sortBy.equals("최신순")){
-            evaluation = evaluationRepository.findByLectureNameOrderByCreated_atDesc(lectureName);
+            evaluation = evaluationRepository.findAllByLectureNameOrderByCreatedDesc(lectureName);
         }else {
             evaluation = evaluationRepository.findByLectureName(lectureName);
         }
@@ -93,7 +86,7 @@ public class EvaluationController {
         evaluation.setComfortableScore(evaluationRequest.getComfortableScore());
         evaluation.setLectureScore(evaluationRequest.getLectureScore());
         evaluation.setLikeCount(evaluationRequest.getLikeCount());
-        evaluation.setCreated_at(evaluationRequest.getCreated_at());
+        evaluation.setCreated(evaluationRequest.getCreated());
         evaluationRepository.save(evaluation);
         return evaluation;
     }
@@ -123,7 +116,7 @@ public class EvaluationController {
             evaluation.setComfortableScore(evaluationRequest.getComfortableScore());
             evaluation.setLectureScore(evaluationRequest.getLectureScore());
             evaluation.setLikeCount(evaluationRequest.getLikeCount());
-            evaluation.setUpdated_at(evaluationRequest.getUpdated_at());
+            evaluation.setUpdated(evaluationRequest.getUpdated());
 
             evaluationRepository.save(evaluation);
 

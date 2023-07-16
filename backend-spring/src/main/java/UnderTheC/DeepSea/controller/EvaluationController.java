@@ -1,21 +1,14 @@
 package UnderTheC.DeepSea.controller;
 
 import UnderTheC.DeepSea.Entity.Evaluation;
-import UnderTheC.DeepSea.Entity.User;
 import UnderTheC.DeepSea.repository.EvaluationRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.repository.query.FluentQuery;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 
 @RestController
 @Tag(name = "Evaluation API", description = "강의 평가 API")
@@ -29,7 +22,8 @@ public class EvaluationController {
     }
 
     @GetMapping("/search")
-    @Operation(summary = "강의 평가 검색 (최신순, likeCount 오름차순)", description = "Evaluation 테이블에서 lectureName으로 검색하여 최신순 또는 likeCount 오름차순으로 정렬된 Evaluation 객체 반환", responses = {
+    @Operation(summary = "강의 평가 검색 (최신순 or 좋아요순)", description = "Evaluation 테이블에서 lectureName으로 검색하여 " +
+            "최신순 또는 'likeCount' 오름차순으로 정렬된 Evaluation 객체 반환", responses = {
             @ApiResponse(responseCode = "200", description = "성공")
     })
     public List<Evaluation> searchByLectureName(
@@ -38,9 +32,9 @@ public class EvaluationController {
     ) {
         List<Evaluation> evaluation;
         if (sortBy.equals("좋아요수")) {
-            evaluation = evaluationRepository.findByLectureNameOrderByLikeCountAsc(lectureName);
+            evaluation = evaluationRepository.findAllByLectureNameOrderByLikeCountAsc(lectureName);
         } else if (sortBy.equals("최신순")){
-            evaluation = evaluationRepository.findByLectureNameOrderByCreated_atDesc(lectureName);
+            evaluation = evaluationRepository.findAllByLectureNameOrderByCreatedDesc(lectureName);
         }else {
             evaluation = evaluationRepository.findByLectureName(lectureName);
         }
@@ -61,7 +55,7 @@ public class EvaluationController {
 
 
     @GetMapping("/view")
-    @Operation(summary = "강의 평가 보기", description = "Evaluation 테이블의 evaluationID로 특정 강의 평가 반환", responses = {
+    @Operation(summary = "강의 평가 개별 찾기", description = "Evaluation 테이블의 evaluationID로 특정 강의 평가 반환", responses = {
             @ApiResponse(responseCode = "200", description = "성공")
     })
     public Optional<Evaluation> findByEvaluationID(@RequestParam("evaluationID") String evaluationID) {
@@ -93,11 +87,11 @@ public class EvaluationController {
         evaluation.setComfortableScore(evaluationRequest.getComfortableScore());
         evaluation.setLectureScore(evaluationRequest.getLectureScore());
         evaluation.setLikeCount(evaluationRequest.getLikeCount());
-        evaluation.setCreated_at(evaluationRequest.getCreated_at());
+        evaluation.setCreated(evaluationRequest.getCreated());
         evaluationRepository.save(evaluation);
         return evaluation;
     }
-    @PostMapping("/update/{id}")
+    @PutMapping("/update/{id}")
     @Operation(summary = "강의 평가 수정", description = "evaluationID 입력받아 Evaluation 테이블의 강의 평가 수정", responses = {
             @ApiResponse(responseCode = "200", description = "성공")
     })
@@ -123,7 +117,7 @@ public class EvaluationController {
             evaluation.setComfortableScore(evaluationRequest.getComfortableScore());
             evaluation.setLectureScore(evaluationRequest.getLectureScore());
             evaluation.setLikeCount(evaluationRequest.getLikeCount());
-            evaluation.setUpdated_at(evaluationRequest.getUpdated_at());
+            evaluation.setUpdated(evaluationRequest.getUpdated());
 
             evaluationRepository.save(evaluation);
 
@@ -166,7 +160,6 @@ public class EvaluationController {
     })
     public Evaluation deleteByLectureName(@RequestParam("evluationID") String evaluationID) {
         Optional<Evaluation> evaluation = null;
-        //Optional<User> user = null;
         evaluation = evaluationRepository.findById(evaluationID);
         evaluationRepository.deleteById(evaluationID);
         return evaluation.get();

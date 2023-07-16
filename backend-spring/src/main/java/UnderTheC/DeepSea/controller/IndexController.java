@@ -37,8 +37,7 @@ public class IndexController {
 
     @PostMapping("login")
     @Operation(summary = "로그인", description = "로그인 API", responses = {
-            @ApiResponse(responseCode = "200", description = "로그인 성공"),
-            @ApiResponse(responseCode = "400", description = "로그인 실패")
+            @ApiResponse(responseCode = "200", description = "로그인 성공")
     })
     public LoginResponse login(HttpServletRequest request, @RequestBody LoginRequest json) {
         /* 로그인 상태 확인 */

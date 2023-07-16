@@ -22,7 +22,8 @@ public class EvaluationController {
     }
 
     @GetMapping("/search")
-    @Operation(summary = "강의 평가 검색 (최신순, likeCount 오름차순)", description = "Evaluation 테이블에서 lectureName으로 검색하여 최신순 또는 likeCount 오름차순으로 정렬된 Evaluation 객체 반환", responses = {
+    @Operation(summary = "강의 평가 검색 (최신순 or 좋아요순)", description = "Evaluation 테이블에서 lectureName으로 검색하여 " +
+            "최신순 또는 'likeCount' 오름차순으로 정렬된 Evaluation 객체 반환", responses = {
             @ApiResponse(responseCode = "200", description = "성공")
     })
     public List<Evaluation> searchByLectureName(
@@ -54,7 +55,7 @@ public class EvaluationController {
 
 
     @GetMapping("/view")
-    @Operation(summary = "강의 평가 보기", description = "Evaluation 테이블의 evaluationID로 특정 강의 평가 반환", responses = {
+    @Operation(summary = "강의 평가 개별 찾기", description = "Evaluation 테이블의 evaluationID로 특정 강의 평가 반환", responses = {
             @ApiResponse(responseCode = "200", description = "성공")
     })
     public Optional<Evaluation> findByEvaluationID(@RequestParam("evaluationID") String evaluationID) {
@@ -90,7 +91,7 @@ public class EvaluationController {
         evaluationRepository.save(evaluation);
         return evaluation;
     }
-    @PostMapping("/update/{id}")
+    @PutMapping("/update/{id}")
     @Operation(summary = "강의 평가 수정", description = "evaluationID 입력받아 Evaluation 테이블의 강의 평가 수정", responses = {
             @ApiResponse(responseCode = "200", description = "성공")
     })
@@ -159,7 +160,6 @@ public class EvaluationController {
     })
     public Evaluation deleteByLectureName(@RequestParam("evluationID") String evaluationID) {
         Optional<Evaluation> evaluation = null;
-        //Optional<User> user = null;
         evaluation = evaluationRepository.findById(evaluationID);
         evaluationRepository.deleteById(evaluationID);
         return evaluation.get();

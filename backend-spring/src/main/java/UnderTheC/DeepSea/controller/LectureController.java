@@ -18,7 +18,7 @@ import java.util.Optional;
 import java.util.function.Function;
 
 @RestController
-@Tag(name = "lecture API", description = "강의 정보 API")
+@Tag(name = "lecture API", description = "강의 정보 API(미사용)")
 @RequestMapping("/lecture")
 
 public class LectureController {

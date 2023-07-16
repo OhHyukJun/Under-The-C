@@ -17,6 +17,7 @@ function Header() {
             <Nav.Link href="/">메인 페이지</Nav.Link>
             <Nav.Link href="/Board">강의평가</Nav.Link>
           </Nav>
+          <Nav className="ms-auto">
           <Form className="d-flex">
             <Form.Control
               type="search"
@@ -26,7 +27,6 @@ function Header() {
             />
             <Button variant="light" size="sm">Search</Button>
           </Form>
-          <Nav className="ms-auto">
             <Button variant="light" size="sm" href="/RegisterPage">
               회원가입
             </Button>

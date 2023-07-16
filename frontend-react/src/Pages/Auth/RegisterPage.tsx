@@ -1,4 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
+import { useNavigate } from 'react-router';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { memberPost } from './Register/api';
@@ -12,8 +13,10 @@ import { Member } from './Register/Member';
 */
 const RegisterPage = () => {
   const { register, handleSubmit, formState: { errors } , reset} = useForm<Member>();
+  const navigate = useNavigate();
   const mutation = useMutation(memberPost, {
     onSuccess: (data) => {
+      navigate("/");
       console.log('Response:', data);
     },
     onError: (error) => {

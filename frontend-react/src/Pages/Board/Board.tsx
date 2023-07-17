@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation } from 'react-query';
 import { useForm } from 'react-hook-form';
 import { ILecture } from '../../Atoms/Lecture';
 import { lectorePost } from './api';
@@ -35,7 +35,7 @@ const Board = () => {
               <input
                 type="text"
                 id="title"
-                {...register('title', { required: '제목을 입력하세요' })}
+                {...register('evaluationTitle', { required: '제목을 입력하세요' })}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-3"
               />
             </div>
@@ -47,7 +47,7 @@ const Board = () => {
                 type="number"
                 id="rating"
                 placeholder="1~5 입력"
-                {...register('rating', {min:1 , max:5 })}
+                {...register('totalScore', {min:1 , max:5 })}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-3"
               />
             </div>
@@ -58,7 +58,7 @@ const Board = () => {
               <input
                 type="text"
                 id="lecture"
-                {...register('lecture', { required: '강의명을 입력하세요' })}
+                {...register('lectureName', { required: '강의명을 입력하세요' })}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-3"
               />
             </div>
@@ -69,7 +69,7 @@ const Board = () => {
               <input
                 type="text"
                 id="professor"
-                {...register("professor", { required: '강의명을 입력하세요' })}
+                {...register("professorName", { required: '강의명을 입력하세요' })}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-3"
               />
             </div>
@@ -80,7 +80,7 @@ const Board = () => {
               강의 설명
             </label>
             <textarea
-              {...register('content', { minLength:{
+              {...register('evaluationContent', { minLength:{
                 value: 6,
                 message: '6글자 이상 입력해주세요',
               },  

@@ -1,5 +1,5 @@
 
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from 'react-query';
 import { useRecoilState } from "recoil";
 import { Lecture } from './Lecture';
 import { lectureListState, ILecture } from '../../Atoms/Lecture';
@@ -22,7 +22,7 @@ const Main = () => {
 			<div className="sm p-6 mx-auto bg-neutral-100 ">
 			{
 				lectureList?.map((item: ILecture) => {
-					return <Lecture key={item.id} {...item} /> })
+					return <Lecture key={item.evaluationID} {...item} /> })
 			}
 			</div>
   	);

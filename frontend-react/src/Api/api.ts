@@ -1,9 +1,11 @@
 import axios from "axios";
 
 const URI = "http://115.85.181.92:8090";
+axios.defaults.withCredentials = true;
 
 export const fetchPost = async () => {
-	const res = await axios.get(URI + '/lecture');
+	const res = await axios.get(URI + '/evaluation/find');
+	console.log(res.data);
 	return res.data;
 }
 

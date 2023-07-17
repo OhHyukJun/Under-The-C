@@ -88,8 +88,7 @@ public class EvaluationController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "로그인이 필요합니다."); // 로그인되지 않은 경우 예외 처리
         }
         // 세션에서 로그인 정보를 가져옴
-        User user = new User();
-        user = (User)request.getSession(false).getAttribute("loginUser");
+        User user = (User)request.getSession(false).getAttribute("loginUser");
         String userId = user.getId();
 
         // 검색 조건으로 사용할 lectureName
@@ -103,25 +102,10 @@ public class EvaluationController {
         }
         Evaluation evaluation = new Evaluation();
         // 강의 평가 객체에 evaluationRequest로부터 값을 설정합니다.
-        evaluation.setEvaluationId(evaluationRequest.getEvaluationId());
-        evaluation.setUserId(evaluationRequest.getUserId());
-        evaluation.setLectureName(evaluationRequest.getLectureName());
-        evaluation.setProfessorName(evaluationRequest.getProfessorName());
-        evaluation.setLectureYear(evaluationRequest.getLectureYear());
-        evaluation.setSemesterDivide(evaluationRequest.getSemesterDivide());
-        evaluation.setLectureDivide(evaluationRequest.getLectureDivide());
-        evaluation.setEvaluationTitle(evaluationRequest.getEvaluationTitle());
-        evaluation.setEvaluationContent(evaluationRequest.getEvaluationContent());
-        evaluation.setTotalScore(evaluationRequest.getTotalScore());
-        evaluation.setCreditScore(evaluationRequest.getCreditScore());
-        evaluation.setTotalScore(evaluationRequest.getTotalScore());
-        evaluation.setCreditScore(evaluationRequest.getCreditScore());
-        evaluation.setComfortableScore(evaluationRequest.getComfortableScore());
-        evaluation.setLectureScore(evaluationRequest.getLectureScore());
-        evaluation.setLikeCount(evaluationRequest.getLikeCount());
-        evaluation.setCreated(evaluationRequest.getCreated());
-        evaluationRepository.save(evaluation);
-        return evaluation;
+        evaluationRequest.setUserId(userId);
+        evaluationRepository.save(evaluationRequest);
+
+        return evaluationRequest;
     }
 
     @PatchMapping("/update/{id}")

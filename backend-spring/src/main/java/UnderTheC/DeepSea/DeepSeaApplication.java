@@ -18,7 +18,9 @@ public class DeepSeaApplication {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**").allowedOrigins(System.getenv("REACT_HOST") + ":" + System.getenv("REACT_PORT"));
+				registry.addMapping("/**")
+				.allowedOrigins("http://localhost" + ":" + System.getenv("REACT_PORT"))
+				.allowedMethods("*");
 			}
 		};
 	}

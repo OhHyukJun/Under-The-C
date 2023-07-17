@@ -64,9 +64,14 @@ public class UserController {
 
     @PostMapping("/add")
     @Operation(summary = "유저 추가", description = "user 테이블에 지정된 ID로 유저 추가", responses = {
+<<<<<<< HEAD
             @ApiResponse(responseCode = "200", description = "회원가입 완료")
     })
 
+=======
+            @ApiResponse(responseCode = "200", description = "회원가입 완료"),
+    })
+>>>>>>> e574abc88808f45b329b20e8254d827aff4140c2
     public User addById(@RequestBody UserAdd json) {
         /* json 데이터로 유저 정보 확인 */
         String id = json.getId();
@@ -111,7 +116,11 @@ public class UserController {
         /* 이메일 유효성 검사 */
         isEmailValidate(email);
 
+<<<<<<< HEAD
         /* 유저 테이블 내에 아이디가 존재하고 이메일이 유효할 경우, 회원 정보 수정 진행 */
+=======
+        /* 회원 정보 수정 진행 */
+>>>>>>> e574abc88808f45b329b20e8254d827aff4140c2
         User afterUser = beforeUser.get();
         afterUser.setPassword(password);
         afterUser.setEmail(email);

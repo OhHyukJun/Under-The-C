@@ -18,4 +18,8 @@ public class UserAdd {
         this.password = password;
         this.email = email;
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> e574abc88808f45b329b20e8254d827aff4140c2

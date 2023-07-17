@@ -25,7 +25,7 @@ function Header() {
               className="me-2"
               aria-label="Search"
             />
-            <Button variant="light" size="sm">Search</Button>
+            <Button variant="light" size="sm" href="/">Search</Button>
           </Form>
             <Button variant="light" size="sm" href="/RegisterPage">
               회원가입

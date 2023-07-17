@@ -217,6 +217,7 @@ public class EvaluationController {
             evaluation.setLectureScore("string");
             evaluation.setLikeCount(0);
             evaluation.setCreated(new Date());
+            evaluation.setUpdated(new Date());
 
             this.evaluationRepository.save(evaluation);
         }
@@ -239,6 +240,7 @@ public class EvaluationController {
             evaluation.setLectureScore("string");
             evaluation.setLikeCount(0);
             evaluation.setCreated(new Date());
+            evaluation.setUpdated(new Date());
 
             this.evaluationRepository.save(evaluation);
         }
@@ -261,6 +263,7 @@ public class EvaluationController {
             evaluation.setLectureScore("string");
             evaluation.setLikeCount(0);
             evaluation.setCreated(new Date());
+            evaluation.setUpdated(new Date());
 
             this.evaluationRepository.save(evaluation);
         }

@@ -43,11 +43,11 @@ public class UserController {
         }
     }
 
-    @GetMapping("/id/me")
+    @GetMapping("/me")
     @Operation(summary = "로그인 되어 있는 유저 정보 보기", description = "로그인 되어 있는 유저 정보 반환", responses = {
             @ApiResponse(responseCode = "200", description = "조회 성공")
     })
-    public User findMineById(HttpServletRequest request) {
+    public User findMe(HttpServletRequest request) {
         /* 로그인 상태 확인 */
         HttpSession session = request.getSession(false);
         if (session == null) {

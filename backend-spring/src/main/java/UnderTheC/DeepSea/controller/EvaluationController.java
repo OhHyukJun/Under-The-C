@@ -28,20 +28,27 @@ public class EvaluationController {
     })
     public List<Evaluation> searchByLectureName(
             @RequestParam("lectureName") String lectureName,
+            @RequestParam("lectureDivide") String lectureDivide,
             @RequestParam("sortBy") String sortBy
     ) {
         List<Evaluation> evaluation;
-        if (sortBy.equals("좋아요수")) {
-            evaluation = evaluationRepository.findAllByLectureNameOrderByLikeCountAsc(lectureName);
-        } else if (sortBy.equals("최신순")){
-            evaluation = evaluationRepository.findAllByLectureNameOrderByCreatedDesc(lectureName);
-        }else {
+        if (sortBy.equals("좋아요순")) {
+            if (lectureDivide != null && !lectureDivide.isEmpty()) {
+                evaluation = evaluationRepository.findAllByLectureNameAndLectureDivideOrderByLikeCountDesc(lectureName, lectureDivide);
+            } else {
+                evaluation = evaluationRepository.findAllByLectureNameOrderByLikeCountDesc(lectureName);
+            }
+        } else if (sortBy.equals("최신순")) {
+            if (lectureDivide != null && !lectureDivide.isEmpty()) {
+                evaluation = evaluationRepository.findAllByLectureNameAndLectureDivideOrderByCreatedDesc(lectureName, lectureDivide);
+            } else {
+                evaluation = evaluationRepository.findAllByLectureNameOrderByCreatedDesc(lectureName);
+            }
+        } else {
             evaluation = evaluationRepository.findByLectureName(lectureName);
         }
         return evaluation;
     }
-
-
 
     @GetMapping("/find")
     @Operation(summary = "강의 평가 모두 찾기", description = "Evaluation 테이블의 모든 강의 평가 반환", responses = {
@@ -69,6 +76,16 @@ public class EvaluationController {
             @ApiResponse(responseCode = "200", description = "성공")
     })
     public Evaluation addByEvaluationName(@RequestBody Evaluation evaluationRequest) {
+        // 검색 조건으로 사용할 userID와 lectureName
+        String userID = evaluationRequest.getUserID();
+        String lectureName = evaluationRequest.getLectureName();
+
+        // userID와 lectureName을 동시에 충족하는 Evaluation 객체 검색
+        Optional<Evaluation> existingEvaluation = evaluationRepository.findByUserIDAndLectureName(userID, lectureName);
+        if (existingEvaluation.isPresent()) {
+            // 이미 해당 조건의 평가가 존재하는 경우 예외 처리
+            throw new IllegalArgumentException("같은 사용자와 강의명으로 작성된 평가가 이미 존재합니다.");
+        }
         Evaluation evaluation = new Evaluation();
         // 강의 평가 객체에 evaluationRequest로부터 값을 설정합니다.
         evaluation.setEvaluationID(evaluationRequest.getEvaluationID());
@@ -91,7 +108,7 @@ public class EvaluationController {
         evaluationRepository.save(evaluation);
         return evaluation;
     }
-    @PutMapping("/update/{id}")
+    @PatchMapping("/update/{id}")
     @Operation(summary = "강의 평가 수정", description = "evaluationID 입력받아 Evaluation 테이블의 강의 평가 수정", responses = {
             @ApiResponse(responseCode = "200", description = "성공")
     })
@@ -105,63 +122,52 @@ public class EvaluationController {
             Evaluation evaluation = optionalEvaluation.get();
 
             // 강의 평가 객체에 evaluationRequest로부터 값을 업데이트합니다.
-            evaluation.setLectureName(evaluationRequest.getLectureName());
-            evaluation.setProfessorName(evaluationRequest.getProfessorName());
-            evaluation.setLectureYear(evaluationRequest.getLectureYear());
-            evaluation.setSemesterDivide(evaluationRequest.getSemesterDivide());
-            evaluation.setLectureDivide(evaluationRequest.getLectureDivide());
-            evaluation.setEvaluationTitle(evaluationRequest.getEvaluationTitle());
-            evaluation.setEvaluationContent(evaluationRequest.getEvaluationContent());
-            evaluation.setTotalScore(evaluationRequest.getTotalScore());
-            evaluation.setCreditScore(evaluationRequest.getCreditScore());
-            evaluation.setComfortableScore(evaluationRequest.getComfortableScore());
-            evaluation.setLectureScore(evaluationRequest.getLectureScore());
-            evaluation.setLikeCount(evaluationRequest.getLikeCount());
-            evaluation.setUpdated(evaluationRequest.getUpdated());
-
+            if (evaluationRequest.getLectureName() != null)
+                evaluation.setLectureName(evaluationRequest.getLectureName());
+            if (evaluationRequest.getProfessorName() != null)
+                evaluation.setProfessorName(evaluationRequest.getProfessorName());
+            if (evaluationRequest.getLectureYear() != 0)
+                evaluation.setLectureYear(evaluationRequest.getLectureYear());
+            if (evaluationRequest.getSemesterDivide() != null)
+                evaluation.setSemesterDivide(evaluationRequest.getSemesterDivide());
+            if (evaluationRequest.getLectureDivide() != null)
+                evaluation.setLectureDivide(evaluationRequest.getLectureDivide());
+            if (evaluationRequest.getEvaluationTitle() != null)
+                evaluation.setEvaluationTitle(evaluationRequest.getEvaluationTitle());
+            if (evaluationRequest.getEvaluationContent() != null)
+                evaluation.setEvaluationContent(evaluationRequest.getEvaluationContent());
+            if (evaluationRequest.getTotalScore() != null)
+                evaluation.setTotalScore(evaluationRequest.getTotalScore());
+            if (evaluationRequest.getCreditScore() != null)
+                evaluation.setCreditScore(evaluationRequest.getCreditScore());
+            if (evaluationRequest.getComfortableScore() != null)
+                evaluation.setComfortableScore(evaluationRequest.getComfortableScore());
+            if (evaluationRequest.getLectureScore() != null)
+                evaluation.setLectureScore(evaluationRequest.getLectureScore());
+            if (evaluationRequest.getLikeCount() != 0)
+                evaluation.setLikeCount(evaluationRequest.getLikeCount());
+            if (evaluationRequest.getUpdated() != null)
+                evaluation.setUpdated(evaluationRequest.getUpdated());
             evaluationRepository.save(evaluation);
-
             return evaluation;
         } else {
-            System.out.println("예외처리");
-            return null;
-            // 평가 ID에 해당하는 객체가 없는 경우 예외 처리
-            //throw new NotFoundException("평가 ID에 해당하는 객체를 찾을 수 없습니다.");
+            //예외처리
+            throw new IllegalArgumentException("평가 ID에 해당하는 객체를 찾을 수 없습니다.");
         }
     }
-
-
-
-/*
-    @PostMapping("/update/{id}")
-    @Operation(summary = "강의 평가 수정", description = "Evaluation 테이블에 강의 평가 수정", responses = {
-            @ApiResponse(responseCode = "200", description = "성공")
-    })
-
-    public Evaluation updateEvaluation(
-            @RequestParam("evaluationID") String evaluationID,
-            String lectureName,
-            String professorName,
-            int lectureYear,
-            String semesterDivide,
-            String lectureDivide,
-            String evaluationTitle,
-            String evaluationContent,
-            String totalScore,
-            String creditScore,
-            String comfortableScore,
-            String lectureScore,
-            int likeCount
-    )*/
 
     @DeleteMapping("/delete")
     @Operation(summary = "강의평가 삭제", description = "Evaluation 테이블에 지정된 evaluationID로 강의평가 삭제", responses = {
             @ApiResponse(responseCode = "200", description = "성공")
     })
     public Evaluation deleteByLectureName(@RequestParam("evluationID") String evaluationID) {
-        Optional<Evaluation> evaluation = null;
-        evaluation = evaluationRepository.findById(evaluationID);
-        evaluationRepository.deleteById(evaluationID);
-        return evaluation.get();
+        Optional<Evaluation> evaluation = evaluationRepository.findById(evaluationID);
+
+        if (evaluation.isPresent()) {
+            evaluationRepository.deleteById(evaluationID);
+            return evaluation.get();
+        } else {
+            throw new IllegalArgumentException("평가 ID에 해당하는 객체를 찾을 수 없습니다.");
+        }
     }
 }

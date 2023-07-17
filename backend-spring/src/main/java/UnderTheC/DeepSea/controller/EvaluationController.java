@@ -5,6 +5,7 @@ import UnderTheC.DeepSea.repository.EvaluationRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -75,9 +76,13 @@ public class EvaluationController {
     @Operation(summary = "강의 평가 추가", description = "Evaluation 테이블에 강의 평가 추가", responses = {
             @ApiResponse(responseCode = "200", description = "성공")
     })
-    public Evaluation addByEvaluationName(@RequestBody Evaluation evaluationRequest) {
-        // 검색 조건으로 사용할 userID와 lectureName
-        String userID = evaluationRequest.getUserID();
+    public Evaluation addByEvaluationName(@RequestBody Evaluation evaluationRequest, HttpSession session) {
+        // 세션에서 로그인 정보를 가져옴
+        String userID = (String) session.getAttribute("userID");
+        if (userID == null) {
+            throw new IllegalArgumentException("로그인이 필요합니다."); // 로그인되지 않은 경우 예외 처리
+        }
+        // 검색 조건으로 사용할 lectureName
         String lectureName = evaluationRequest.getLectureName();
 
         // userID와 lectureName을 동시에 충족하는 Evaluation 객체 검색
@@ -114,13 +119,21 @@ public class EvaluationController {
     })
     public Evaluation updateEvaluation(
             @PathVariable("id") String evaluationID,
-            @RequestBody Evaluation evaluationRequest
+            @RequestBody Evaluation evaluationRequest, HttpSession session
     ) {
+        String userID = (String) session.getAttribute("userID");
+
+        if (userID == null) {
+            throw new IllegalArgumentException("로그인이 필요합니다.");
+        }
 
         Optional<Evaluation> optionalEvaluation = evaluationRepository.findById(evaluationID);
         if (optionalEvaluation.isPresent()) {
             Evaluation evaluation = optionalEvaluation.get();
 
+            if (!evaluation.getUserID().equals(userID)) {
+                throw new IllegalArgumentException("해당 평가의 작성자만 수정할 수 있습니다.");
+            }
             // 강의 평가 객체에 evaluationRequest로부터 값을 업데이트합니다.
             if (evaluationRequest.getLectureName() != null)
                 evaluation.setLectureName(evaluationRequest.getLectureName());
@@ -160,10 +173,20 @@ public class EvaluationController {
     @Operation(summary = "강의평가 삭제", description = "Evaluation 테이블에 지정된 evaluationID로 강의평가 삭제", responses = {
             @ApiResponse(responseCode = "200", description = "성공")
     })
-    public Evaluation deleteByLectureName(@RequestParam("evluationID") String evaluationID) {
+    public Evaluation deleteByLectureName(@RequestParam("evluationID") String evaluationID,HttpSession session
+    ) {
+        String userID = (String) session.getAttribute("userID");
+
+        if (userID == null) {
+            throw new IllegalArgumentException("로그인이 필요합니다.");
+        }
+
         Optional<Evaluation> evaluation = evaluationRepository.findById(evaluationID);
 
         if (evaluation.isPresent()) {
+            if (!evaluation.get().getUserID().equals(userID)) {
+                throw new IllegalArgumentException("해당 평가의 작성자만 삭제할 수 있습니다.");
+            }
             evaluationRepository.deleteById(evaluationID);
             return evaluation.get();
         } else {

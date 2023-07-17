@@ -6,6 +6,7 @@ import UnderTheC.DeepSea.repository.EvaluationRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,13 +34,16 @@ public class RecommendationController {
     @Operation(summary = "강의 평가 추천, 취소", description = "user id, evaluationID 받아와서 recommendation 테이블에 추가", responses = {
             @ApiResponse(responseCode = "200", description = "성공")
     })
-    public Recommendation recommendEvaluation(@RequestBody Recommendation recommendationRequest
+    public Recommendation recommendEvaluation(@RequestBody Recommendation recommendationRequest, HttpSession session
     ) {
-        String userID = recommendationRequest.getUserID();
+        String userID = (String) session.getAttribute("userID"); // 세션에서 로그인한 사용자의 userID 가져오기
+        // 세션에 로그인 정보가 없는 경우 또는 userID가 null인 경우 예외 처리
+        if (userID == null) {
+            throw new IllegalArgumentException("로그인이 필요합니다.");
+        }
         int evaluationID = recommendationRequest.getEvaluationID();
 
-        Recommendation recommendation = null;
-        recommendation = new Recommendation();
+        Recommendation recommendation = new Recommendation();
         recommendation.setUserID(userID);
         recommendation.setEvaluationID(evaluationID);
         recommendation.setCreated(recommendationRequest.getCreated());
@@ -50,22 +54,18 @@ public class RecommendationController {
         Optional<Evaluation> evaluation = evaluationRepository.findById(String.valueOf(evaluationID));
         if (evaluation.isPresent()) {
             if (existingRecommendation.isPresent()) {
-                recommendationRepository.delete(existingRecommendation.get());
-
-                if (evaluation.isPresent()) {
+                    recommendationRepository.delete(existingRecommendation.get());
+                    recommendationRepository.delete(existingRecommendation.get());
                     int temp = evaluation.get().getLikeCount();
                     temp--; // 추천 취소
                     evaluation.get().setLikeCount(temp);
                     evaluationRepository.save(evaluation.get());
-                }
-            } else {
-                if (evaluation.isPresent()) {
+                }else {
                     int temp = evaluation.get().getLikeCount();
                     temp++; //추천
                     evaluation.get().setLikeCount(temp);
                     evaluationRepository.save(evaluation.get());
                     return recommendationRepository.save(recommendation);
-                }
             }
             return recommendationRequest;
         } else {

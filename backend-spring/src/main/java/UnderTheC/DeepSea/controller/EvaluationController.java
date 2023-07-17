@@ -1,11 +1,16 @@
 package UnderTheC.DeepSea.controller;
 
 import UnderTheC.DeepSea.Entity.Evaluation;
+import UnderTheC.DeepSea.Entity.User;
 import UnderTheC.DeepSea.repository.EvaluationRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -62,12 +67,12 @@ public class EvaluationController {
 
 
     @GetMapping("/view")
-    @Operation(summary = "강의 평가 개별 찾기", description = "Evaluation 테이블의 evaluationID로 특정 강의 평가 반환", responses = {
+    @Operation(summary = "강의 평가 개별 찾기", description = "Evaluation 테이블의 evaluationId로 특정 강의 평가 반환", responses = {
             @ApiResponse(responseCode = "200", description = "성공")
     })
-    public Optional<Evaluation> findByEvaluationID(@RequestParam("evaluationID") String evaluationID) {
+    public Optional<Evaluation> findByEvaluationId(@RequestParam("evaluationId") String evaluationId) {
         Optional<Evaluation> evaluation = null;
-        evaluation = evaluationRepository.findById(evaluationID);
+        evaluation = evaluationRepository.findById(evaluationId);
         return evaluation;
     }
 
@@ -75,21 +80,31 @@ public class EvaluationController {
     @Operation(summary = "강의 평가 추가", description = "Evaluation 테이블에 강의 평가 추가", responses = {
             @ApiResponse(responseCode = "200", description = "성공")
     })
-    public Evaluation addByEvaluationName(@RequestBody Evaluation evaluationRequest) {
-        // 검색 조건으로 사용할 userID와 lectureName
-        String userID = evaluationRequest.getUserID();
+    public Evaluation addByEvaluationName( HttpServletRequest request,@RequestBody Evaluation evaluationRequest) {
+
+
+
+        if (request.getSession(false) == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "로그인이 필요합니다."); // 로그인되지 않은 경우 예외 처리
+        }
+        // 세션에서 로그인 정보를 가져옴
+        User user = new User();
+        user = (User)request.getSession(false).getAttribute("loginUser");
+        String userId = user.getId();
+
+        // 검색 조건으로 사용할 lectureName
         String lectureName = evaluationRequest.getLectureName();
 
-        // userID와 lectureName을 동시에 충족하는 Evaluation 객체 검색
-        Optional<Evaluation> existingEvaluation = evaluationRepository.findByUserIDAndLectureName(userID, lectureName);
+        // userId와 lectureName을 동시에 충족하는 Evaluation 객체 검색
+        Optional<Evaluation> existingEvaluation = evaluationRepository.findByUserIdAndLectureName(userId, lectureName);
         if (existingEvaluation.isPresent()) {
             // 이미 해당 조건의 평가가 존재하는 경우 예외 처리
-            throw new IllegalArgumentException("같은 사용자와 강의명으로 작성된 평가가 이미 존재합니다.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "같은 사용자와 강의명으로 작성된 평가가 이미 존재합니다.");
         }
         Evaluation evaluation = new Evaluation();
         // 강의 평가 객체에 evaluationRequest로부터 값을 설정합니다.
-        evaluation.setEvaluationID(evaluationRequest.getEvaluationID());
-        evaluation.setUserID(evaluationRequest.getUserID());
+        evaluation.setEvaluationId(evaluationRequest.getEvaluationId());
+        evaluation.setUserId(evaluationRequest.getUserId());
         evaluation.setLectureName(evaluationRequest.getLectureName());
         evaluation.setProfessorName(evaluationRequest.getProfessorName());
         evaluation.setLectureYear(evaluationRequest.getLectureYear());
@@ -108,19 +123,30 @@ public class EvaluationController {
         evaluationRepository.save(evaluation);
         return evaluation;
     }
+
     @PatchMapping("/update/{id}")
-    @Operation(summary = "강의 평가 수정", description = "evaluationID 입력받아 Evaluation 테이블의 강의 평가 수정", responses = {
+    @Operation(summary = "강의 평가 수정", description = "evaluationId 입력받아 Evaluation 테이블의 강의 평가 수정", responses = {
             @ApiResponse(responseCode = "200", description = "성공")
     })
     public Evaluation updateEvaluation(
-            @PathVariable("id") String evaluationID,
-            @RequestBody Evaluation evaluationRequest
+            @PathVariable("id") String evaluationId,
+            @RequestBody Evaluation evaluationRequest, HttpServletRequest request
     ) {
 
-        Optional<Evaluation> optionalEvaluation = evaluationRepository.findById(evaluationID);
+        if (request.getSession(false) == null) {
+            throw new IllegalArgumentException("로그인이 필요합니다.");
+        }
+        User user = new User();
+        user = (User)request.getSession(false).getAttribute("loginUser");
+        String userId = user.getId();
+
+        Optional<Evaluation> optionalEvaluation = evaluationRepository.findById(evaluationId);
         if (optionalEvaluation.isPresent()) {
             Evaluation evaluation = optionalEvaluation.get();
 
+            if (!evaluation.getUserId().equals(userId)) {
+                throw new IllegalArgumentException("해당 평가의 작성자만 수정할 수 있습니다.");
+            }
             // 강의 평가 객체에 evaluationRequest로부터 값을 업데이트합니다.
             if (evaluationRequest.getLectureName() != null)
                 evaluation.setLectureName(evaluationRequest.getLectureName());
@@ -152,19 +178,32 @@ public class EvaluationController {
             return evaluation;
         } else {
             //예외처리
-            throw new IllegalArgumentException("평가 ID에 해당하는 객체를 찾을 수 없습니다.");
+            throw new IllegalArgumentException("평가 Id에 해당하는 객체를 찾을 수 없습니다.");
         }
     }
 
     @DeleteMapping("/delete")
-    @Operation(summary = "강의평가 삭제", description = "Evaluation 테이블에 지정된 evaluationID로 강의평가 삭제", responses = {
+    @Operation(summary = "강의평가 삭제", description = "Evaluation 테이블에 지정된 evaluationId로 강의평가 삭제", responses = {
             @ApiResponse(responseCode = "200", description = "성공")
     })
-    public Evaluation deleteByLectureName(@RequestParam("evluationID") String evaluationID) {
-        Optional<Evaluation> evaluation = evaluationRepository.findById(evaluationID);
+    public Evaluation deleteByLectureName(@RequestParam("evaluationId") String evaluationId, HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+
+        if (session == null) {
+            throw new IllegalArgumentException("로그인이 필요합니다.");
+        }
+        User user = new User();
+        user = (User)request.getSession(false).getAttribute("loginUser");
+
+        String userId = user.getId();
+
+        Optional<Evaluation> evaluation = evaluationRepository.findById(evaluationId);
 
         if (evaluation.isPresent()) {
-            evaluationRepository.deleteById(evaluationID);
+            if (!evaluation.get().getUserId().equals(userId)) {
+                throw new IllegalArgumentException("해당 평가의 작성자만 삭제할 수 있습니다.");
+            }
+            evaluationRepository.deleteById(evaluationId);
             return evaluation.get();
         } else {
             throw new IllegalArgumentException("평가 ID에 해당하는 객체를 찾을 수 없습니다.");

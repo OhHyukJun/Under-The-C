@@ -9,7 +9,7 @@ export const fetchPost = async () => {
 }
 
 export const fetchLogin = async (id: string, password: string) => {
-	const res = await axios.post('/login', {
+	const res = await axios.post('http://localhost:8090/login', {
 	//const res = await axios.post(URI + '/login', {
 		id: id,
 		password: password,

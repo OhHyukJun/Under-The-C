@@ -6,12 +6,14 @@ import UnderTheC.DeepSea.repository.EvaluationRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -191,6 +193,76 @@ public class EvaluationController {
             return evaluation.get();
         } else {
             throw new IllegalArgumentException("평가 ID에 해당하는 객체를 찾을 수 없습니다.");
+        }
+    }
+
+    @PostConstruct
+    public void init() {
+
+        for (int i=0; i<10; ++i) {
+            Evaluation evaluation = new Evaluation();
+
+            evaluation.setEvaluationId(i);
+            evaluation.setUserId("test1");
+            evaluation.setLectureName("string");
+            evaluation.setProfessorName("string");
+            evaluation.setLectureYear(0);
+            evaluation.setSemesterDivide("string");
+            evaluation.setLectureDivide("string");
+            evaluation.setEvaluationTitle("string");
+            evaluation.setEvaluationContent("string");
+            evaluation.setTotalScore("string");
+            evaluation.setCreditScore("string");
+            evaluation.setComfortableScore("string");
+            evaluation.setLectureScore("string");
+            evaluation.setLikeCount(0);
+            evaluation.setCreated(new Date());
+
+            this.evaluationRepository.save(evaluation);
+        }
+
+        for (int i=10; i<20; ++i) {
+            Evaluation evaluation = new Evaluation();
+
+            evaluation.setEvaluationId(i);
+            evaluation.setUserId("test2");
+            evaluation.setLectureName("string");
+            evaluation.setProfessorName("string");
+            evaluation.setLectureYear(0);
+            evaluation.setSemesterDivide("string");
+            evaluation.setLectureDivide("string");
+            evaluation.setEvaluationTitle("string");
+            evaluation.setEvaluationContent("string");
+            evaluation.setTotalScore("string");
+            evaluation.setCreditScore("string");
+            evaluation.setComfortableScore("string");
+            evaluation.setLectureScore("string");
+            evaluation.setLikeCount(0);
+            evaluation.setCreated(new Date());
+
+            this.evaluationRepository.save(evaluation);
+        }
+
+        for (int i=20; i<30; ++i) {
+            Evaluation evaluation = new Evaluation();
+
+            evaluation.setEvaluationId(i);
+            evaluation.setUserId("test3");
+            evaluation.setLectureName("string");
+            evaluation.setProfessorName("string");
+            evaluation.setLectureYear(0);
+            evaluation.setSemesterDivide("string");
+            evaluation.setLectureDivide("string");
+            evaluation.setEvaluationTitle("string");
+            evaluation.setEvaluationContent("string");
+            evaluation.setTotalScore("string");
+            evaluation.setCreditScore("string");
+            evaluation.setComfortableScore("string");
+            evaluation.setLectureScore("string");
+            evaluation.setLikeCount(0);
+            evaluation.setCreated(new Date());
+
+            this.evaluationRepository.save(evaluation);
         }
     }
 }

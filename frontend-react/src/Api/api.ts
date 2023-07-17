@@ -4,7 +4,6 @@ const URI = `http://localhost:${process.env.REACT_APP_SPRING_PORT}`;
 
 export const fetchPost = async () => {
 	const res = await axios.get(URI + `/evaluation/find`);
-	console.log(res.data);
 	return res.data;
 }
 

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 //const URI = "http://localhost:4000/posts";
-const URI = "http://115.85.181.92:8090/evaluation/add";
+const URI = "${SPRING_HOST}:${SPRING_PORT}/evaluation/add";
 
 export const lectorePost = async (data: any) => {
     data.rating = parseInt(data.rating);

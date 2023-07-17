@@ -1,16 +1,14 @@
 import axios from "axios";
 
+const URI = `http://localhost:${process.env.REACT_APP_SPRING_PORT}`;
+
 export const fetchPost = async () => {
-	//console.log('/evaluation/find')
-	//console.log(process.env)
-	const res = await axios.get('http://localhost:8090/evaluation/find');
-	console.log(res.data);
+	const res = await axios.get(URI + `/evaluation/find`);
 	return res.data;
 }
 
 export const fetchLogin = async (id: string, password: string) => {
-	const res = await axios.post('http://localhost:8090/login', {
-	//const res = await axios.post(URI + '/login', {
+	const res = await axios.post(URI + '/login', {
 		id: id,
 		password: password,
 	});

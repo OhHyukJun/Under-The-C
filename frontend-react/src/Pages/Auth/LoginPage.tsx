@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { LoginState } from "../../Atoms/Login";
+import { LoginState, isLoginState } from "../../Atoms/Login";
 import { useRecoilState } from "recoil";
 import { fetchLogin } from "../../Api/api";
 import { useMutation } from "react-query";
@@ -9,16 +9,19 @@ import { useState } from "react";
 const LoginPage = () => {
 	const [id, setId] = useState("");
 	const [password, setPassword] = useState("");
-	const [loginState, setLoginState] = useRecoilState(LoginState);
-	const navigate = useNavigate();
+	const [, setLoginState] = useRecoilState(LoginState);
+	const [, setIsLoginState] = useRecoilState(isLoginState);
+ 	const navigate = useNavigate();
 
 	const loginMutation = useMutation(() => fetchLogin(id, password), {
 		 onSuccess: () => {
 			setLoginState({ id: id, password: password });
+			setIsLoginState(true);
 			navigate('/');
 		},
 		onError: () => {
 			alert("로그인에 실패했습니다.");
+			setIsLoginState(false);
 			setId('');
 			setPassword('');
 		}

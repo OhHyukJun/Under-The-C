@@ -20,10 +20,10 @@ const Main = () => {
 
 	return (
 			<div className="sm p-6 mx-auto bg-neutral-100 ">
-			{/*{
+			{
 				lectureList?.map((item: ILecture) => {
 					return <Lecture key={item.evaluationID} {...item} /> })
-			}*/}
+			}
 			</div>
   	);
 };

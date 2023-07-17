@@ -12,8 +12,8 @@ import UserPage from './Pages/User/UserPage';
 const App = () => {
   return (
     <>
-    <Header/>
 	<RecoilRoot>
+    <Header/>
 		<BrowserRouter>
 			<Routes>
 			<Route path="/" element={<Main/>}/>

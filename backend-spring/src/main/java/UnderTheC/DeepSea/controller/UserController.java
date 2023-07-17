@@ -27,10 +27,27 @@ public class UserController {
     }
 
     @GetMapping("/id")
-    @Operation(summary = "유저 정보 보기", description = "user 테이블에 저장된 ID로 유저 정보 반환", responses = {
+    @Operation(summary = "유저 정보 보기", description = "user 테이블에 지정된 ID로 유저 정보 반환", responses = {
             @ApiResponse(responseCode = "200", description = "조회 성공")
     })
-    public User findById(HttpServletRequest request) {
+    public User findById(@RequestParam("id") String id) {
+        Optional<User> user = null;
+        user = userRepository.findById(id);
+
+        /* 유저 정보 반환 */
+        if (user.isPresent()) {
+            return user.get();
+        }
+        else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "존재하지 않는 아이디입니다.");
+        }
+    }
+
+    @GetMapping("/id/me")
+    @Operation(summary = "로그인 되어 있는 유저 정보 보기", description = "로그인 되어 있는 유저 정보 반환", responses = {
+            @ApiResponse(responseCode = "200", description = "조회 성공")
+    })
+    public User findMineById(HttpServletRequest request) {
         /* 로그인 상태 확인 */
         HttpSession session = request.getSession(false);
         if (session == null) {
@@ -64,14 +81,8 @@ public class UserController {
 
     @PostMapping("/add")
     @Operation(summary = "유저 추가", description = "user 테이블에 지정된 ID로 유저 추가", responses = {
-<<<<<<< HEAD
             @ApiResponse(responseCode = "200", description = "회원가입 완료")
     })
-
-=======
-            @ApiResponse(responseCode = "200", description = "회원가입 완료"),
-    })
->>>>>>> e574abc88808f45b329b20e8254d827aff4140c2
     public User addById(@RequestBody UserAdd json) {
         /* json 데이터로 유저 정보 확인 */
         String id = json.getId();
@@ -116,11 +127,7 @@ public class UserController {
         /* 이메일 유효성 검사 */
         isEmailValidate(email);
 
-<<<<<<< HEAD
-        /* 유저 테이블 내에 아이디가 존재하고 이메일이 유효할 경우, 회원 정보 수정 진행 */
-=======
         /* 회원 정보 수정 진행 */
->>>>>>> e574abc88808f45b329b20e8254d827aff4140c2
         User afterUser = beforeUser.get();
         afterUser.setPassword(password);
         afterUser.setEmail(email);

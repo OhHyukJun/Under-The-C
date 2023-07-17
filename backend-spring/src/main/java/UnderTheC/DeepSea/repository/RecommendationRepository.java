@@ -10,7 +10,8 @@ import java.util.Optional;
 public interface RecommendationRepository extends JpaRepository<Recommendation, String> {
 
 
-    Recommendation findByUserID(String userID);
+    Recommendation findByUserId(String userId);
 
-    Optional<Recommendation> findByUserIDAndEvaluationID(String userID, int evaluationID);
+
+    Optional<Recommendation> findByUserIdAndEvaluationId(String userId, int evaluationId);
 }

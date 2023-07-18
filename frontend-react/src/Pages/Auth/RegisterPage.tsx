@@ -1,6 +1,6 @@
 import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router';
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { memberPost } from './Register/api';
 import { Member } from './Register/Member';
@@ -12,11 +12,13 @@ import { Member } from './Register/Member';
 }
 */
 const RegisterPage = () => {
-  const { register, handleSubmit, formState: { errors } , reset, getValues} = useForm<Member>({mode:"onChange"});
+  const { register, handleSubmit, formState: { errors } , reset} = useForm<Member>({mode:"onChange"});
   const navigate = useNavigate();
   const mutation = useMutation(memberPost, {
     onSuccess: (data) => {
+      reset();
       navigate("/");
+
       console.log('Response:', data);
     },
     onError: (error) => {
@@ -24,12 +26,10 @@ const RegisterPage = () => {
     },
   });
 
-  const onSubmit = (data: Member) => {
+  const onSubmit = handleSubmit((data: Member) => {
     mutation.mutate(data);
-    
     console.log('Member:', data);
-    reset();
-  };
+  });
 
 
   return (
@@ -38,13 +38,13 @@ const RegisterPage = () => {
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
       <a href="/" className="flex items-center no-underline mb-6 text-2xl font-semibold text-gray-900">
           Under-The-C   
-      </a>dark:border-g
+      </a>
       <div className="w-full bg-white rounded-lg shadow ">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
               <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
                   회원가입
               </h1>
-              <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit(onSubmit)}>
+              <form className="space-y-4 md:space-y-6" onSubmit={onSubmit}>
                   <div>
                       <label htmlFor="id" className="block mb-2 text-sm font-medium text-gray-900">아이디</label>
                       <input 

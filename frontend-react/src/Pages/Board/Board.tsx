@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation } from 'react-query';
 import { useForm } from 'react-hook-form';
 import { ILecture } from '../../Atoms/Lecture';
 import { lectorePost } from './api';

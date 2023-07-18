@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router';
 import React from 'react';
 import { useForm } from 'react-hook-form';

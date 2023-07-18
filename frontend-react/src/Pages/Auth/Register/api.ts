@@ -1,10 +1,10 @@
 import axios from "axios";
-//import Member from './Member';
 
-//const URI = "http://localhost:4000/members";
-const URI = 'http://localhost:8090/user/add';
+const BASE_URL = `http://localhost:${process.env.REACT_APP_SPRING_PORT}`;
 
 export const memberPost = async (data: any) => {
-    const res = await axios.post(URI, data);
-    return res.data;
-  };
+  const URL = `${BASE_URL}/user/add`;
+  console.log("URL:", URL);
+  const res = await axios.post(URL, data);
+  return res.data;
+};

@@ -4,6 +4,10 @@ const URI = `http://localhost:${process.env.REACT_APP_SPRING_PORT}/user/add`;
 
 export const memberPost = async (data: any) => {
   console.log("URI:", URI);
-  const res = await axios.post(URI, data);
+  const res = await axios.post(URI, data,{
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
   return res.data;
 };
